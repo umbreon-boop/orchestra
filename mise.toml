@@ -22,7 +22,7 @@ run = "umbra fmt"
 
 [tasks.lint]
 description = "Check code quality without modifying files"
-tools = { "cargo:selene" = "latest" }
+tools = { "aqua:Kampfkarren/selene" = "latest" }
 run = "umbra fmt --check && selene src/*"
 
 [tasks.doc]
