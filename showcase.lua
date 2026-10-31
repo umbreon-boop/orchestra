@@ -9,50 +9,49 @@ local Performance = Orchestra.Performance
 local Silent = Orchestra.Silent
 local Router = Silent.route
 
--- Camera mode writes CFrame on top of the default camera, which cannot follow
--- it back into its own yaw/pitch state on touch devices. Start those in input
--- mode so the game's camera remains authoritative.
 local defaultMode = "Camera"
 if Input.TouchEnabled and not Input.KeyboardEnabled then defaultMode = "Input" end
 
--- Start the modules at the same values the widgets display.
-Aim.targetPart = "HumanoidRootPart"
-Aim.targetSelection = "angle"
-Aim.aimMode = string.lower(defaultMode)
-Aim.runPriority = 200
-Aim.fovDeg = 90
-Aim.smoothness = 1
-Aim.sensitivity = 1
-Aim.baseInputStepX = 10
-Aim.baseInputStepY = -10
-Aim.inputTouchArea = {Vector2.new(-1, -1), Vector2.new(-1, -1)}
-Aim.prediction = 0
-Aim.maxDistance = 500
-Aim.jitterEnabled = false
-Aim.jitterIntensity = 1
-Aim.jitterFrequency = 1
-Aim.jitterScale = 1
-Aim.maxJitterOffset = 1
-Aim.useRay = false
-Aim.respectTeams = false
+Aim:From({
+	targetPart = "HumanoidRootPart",
+	targetSelection = "angle",
+	aimMode = string.lower(defaultMode),
+	runPriority = 200,
+	fovDeg = 90,
+	smoothness = 1,
+	sensitivity = 1,
+	baseInputStepX = 10,
+	baseInputStepY = -10,
+	inputTouchArea = {Vector2.new(-1, -1), Vector2.new(-1, -1)},
+	prediction = 0,
+	maxDistance = 500,
+	jitterEnabled = false,
+	jitterIntensity = 1,
+	jitterFrequency = 1,
+	jitterScale = 1,
+	maxJitterOffset = 1,
+	useRay = false,
+	respectTeams = false,
+})
 
-Router.enabled = false
-Router.angle = 30
-Router.wall = false
-Router.team = false
-Router.part = "Head"
-Router.selection = "crosshair"
-Router.root = "HumanoidRootPart"
-Router.real = false
-Router.drag = 0
-Router.speed = 100
-Router.gravity = 196.2
-Router.predict = 0
+Router:From({
+	enabled = false,
+	angle = 30,
+	wall = false,
+	team = false,
+	part = "Head",
+	selection = "crosshair",
+	root = "HumanoidRootPart",
+	real = false,
+	drag = 0,
+	speed = 100,
+	gravity = 196.2,
+	predict = 0,
+})
 
 local MODES = {Camera = "camera", Input = "input"}
 local toggles = {}
 
--- Wires a toggle to an Interface property and remembers it for the shutdown sweep.
 local function feature(section, interface, property, config)
 	config.Callback = function(value)
 		interface[property] = value
@@ -291,7 +290,6 @@ aimTab:Paragraph({
 
 local aimSection = aimTab:Section({Title = "Targeting"})
 local touchArea = {topLeftX = -1, topLeftY = -1, bottomRightX = -1, bottomRightY = -1}
---@inline
 local function updateTouchArea()
 	Aim.inputTouchArea = {
 		Vector2.new(touchArea.topLeftX, touchArea.topLeftY),
@@ -299,7 +297,6 @@ local function updateTouchArea()
 	}
 end
 
---@inline
 local function coordinateInput(title, field)
 	aimSection:Input({
 		Title = title,
@@ -367,6 +364,7 @@ slider(jitterSection, "Scale", Aim, "jitterScale", 1, 0, 10, 2)
 slider(jitterSection, "Max offset", Aim, "maxJitterOffset", 1, 0, 15, 1)
 
 -- Silent
+
 local silentTab = window:Tab({Title = "Silent", Icon = "eye"})
 silentTab:Paragraph({
 	Title = "Acquire, then spoof",
@@ -489,7 +487,6 @@ Apogee:Notify({
 	Duration = 4,
 })
 
--- loads autoload.bin if it exists.
 local autoloaded, autoloadError = Apogee.Config:Autoload()
 if autoloaded then
 	Apogee:Notify("Interface", "Config loaded", {SubContent = "Loaded autoload.bin", Duration = 7})
