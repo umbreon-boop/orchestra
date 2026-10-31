@@ -9,7 +9,7 @@ luajit = "latest"
 
 [tasks.build]
 description = "Build the project"
-run = "umbra build"
+run = "umbra update && umbra build"
 
 [tasks.serve]
 description = "Locally serve the built project"

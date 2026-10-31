@@ -1,5 +1,12 @@
-local Apogee = loadstring(game:HttpGet("https://github.com/umbreon-boop/apogee/releases/latest/download/artifact.lua"))()
-local Orchestra = require("./src/lib")
+local function require(md)
+  return loadstring(isfile(`orchestraShowcase/{md}.lua`) and readfile(`orchestraShowcase/{md}.lua`) or (function()
+    local s = game:HttpGet(`https://github.com/umbreon-boop/{md}/releases/latest/download/artifact.lua`)
+    makefolder("orchestraShowcase") writefile(`orchestraShowcase/{md}.lua`, s) return s
+  end)())()
+end
+
+local Apogee = require("apogee")
+local Orchestra = require("orchestra")
 local Input = game:GetService("UserInputService")
 
 local Aim = Orchestra.Aim
